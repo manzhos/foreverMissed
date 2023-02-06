@@ -30,7 +30,10 @@
     <div id="emailList" class="list-wrap" v-if="!isLoading">
       <div v-for="(user, index) in emailList" class="list-block list-item">
         <div class="user-item">
-          <span>{{ user.email }}</span>
+          <span>
+            <div class="name">{{ user.fullname }}</div>
+            <div class="email">{{ user.email }}</div>
+          </span>
           <v-select :roles="roles" :curRole="roles.find(el => el.id === user.role)" :userId="index" @setRole="setUserRole"/>
         </div>
         <span><font-awesome-icon icon="fa-solid fa-circle-minus" class="ico handler"  @click="delEmailFromList(index)" /></span>
@@ -56,6 +59,7 @@
 <script>
 import vPopup   from './popup/v-popup'
 import vSelect  from './select/v-select'
+import { faker } from '@faker-js/faker';
 
 export default {
   name: "invite-modal",
@@ -96,7 +100,10 @@ export default {
         alert("Email already exist");
         return;
       }
-      this.emailList.push({'email':this.email, 'role': 2});
+
+      const fullName = faker.name.firstName() + ' ' +faker.name.lastName();
+
+      this.emailList.push({'email':this.email, 'role': 2, 'fullname': fullName});
       this.setAddInfo();
       // console.log('Email list:', this.emailList);
     },
@@ -232,6 +239,22 @@ export default {
     color: #D1CAC1;
     background-color: #D1CAC1;
     height: 1px;
+  }
+  .name {
+    font-family: 'Open Sans', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #3C1F1D;
+  }
+  .email {
+    font-family: 'Open Sans', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #876A68;
   }
 
 </style>
