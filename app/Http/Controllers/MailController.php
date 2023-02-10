@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -22,9 +23,9 @@ class MailController extends Controller
 		];
 
 		foreach ($request->emailList as $key => $emailItem) {
-			//Log::debug(now()->addMinutes($key));
-			Mail::to($emailItem['email'])
-				->later(now()->addMinutes($key), new InviteMail($mailData));
+			try{
+				Mail::to($emailItem['email'])->later(now()->addMinutes($key), new InviteMail($mailData));
+			} catch( Exception $exception ){ dd($exception); }
 		}
 
 		return response()->json(['success' => true]);
